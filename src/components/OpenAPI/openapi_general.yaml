@@ -1,0 +1,1371 @@
+openapi: 3.0.1
+info:
+  title: "Interseguro API Docs"
+  description: |
+    # Introducción 
+
+    Con [Interseguro](https://www.interseguro.pe/) podrá integrar distintas funcionalidades desde Obtención de Datos, Cotización y Venta.
+
+    La suite de APIs de Interseguro consiste en en los siguientes RESTful servicios web. La API de Interseguro se basa en HTTP. Nuestra API es RESTful. 
+    Tiene URL de recursos predecibles. 
+
+    Devuelve códigos de respuesta HTTP para indicar errores. También acepta y devuelve JSON en el cuerpo HTTP.Puede usar su biblioteca HTTP / REST favorita para su lenguaje de programación para usar la API de Interseguro. 
+    
+    Tenemos otras APIs que también están disponibles. Cada acción de nuestra aplicación está respaldada por una API que está documentada y disponible para su uso para que pueda automatizar cualquier flujo de trabajo necesario. Este documento contiene los recursos integrados más comúnmente, incluyendo desde ejemplos hasta tutoriales proporcionados.
+    
+    ## Principales Entidades de Datos y Conceptos
+    Para facilitar la compresión y simplificar el manejo de las RESTful APIS de Interseguro, se ofrece las siguientes entidades y sus definiciones. 
+    ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/SOATEntities.svg)
+
+    # Getting started
+    
+    La API de Interseguro se basa en HTTP. Nuestra API es RESTful. Tiene URL de recursos predecibles. Devuelve códigos de respuesta HTTP para indicar errores. También acepta y devuelve JSON en el cuerpo HTTP. 
+
+    Puede usar su biblioteca HTTP / REST favorita para su lenguaje de programación para usar la API de Interseguro.
+
+    Tenemos otras API que también están disponibles. Cada acción de nuestra aplicación está respaldada por una API que está documentada y disponible para su uso para que pueda automatizar cualquier flujo de trabajo necesario. Este documento contiene los recursos integrados más comúnmente, incluyendo desde ejemplos hasta tutoriales proporcionados.
+
+    # Manejo de Errores 
+    Si falla una solicitud a Interseguro REST API, la respuesta contendrá un código de error de tres dígitos con un mensaje de error correspondiente para indicar los detalles del error.
+    El código de categoría de error de 3 dígitos identifica el tipo de error, por ejemplo, recurso no encontrado o campo obligatorio faltante.
+
+    El siguiente diagrama describe todas las categorías de errores y la resolución correspondiente:
+    ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/ErrorHandling.svg)
+  version: ""
+servers:
+  - url: 'https://interseguro-docs.web.app'
+tags: 
+ - 
+   name: "SOAT"
+   description: |
+        Según el sitio oficial de [Interseguro](https://www.interseguro.pe), el SOAT es el Seguro Obligatorio de Accidentes de Tránsito que cubre la muerte y lesiones corporales que sufran las personas, sean ocupantes o terceros no ocupantes de un vehículo. Más información del producto en: [Interseguro SOAT](https://www.interseguro.pe/soat/).
+        Según el Portal de Interseguro, SOAT es el Seguro Obligatorio de Accidentes de Tránsito que cubre la muerte y lesiones corporales que sufran las personas, sean ocupantes o terceros no ocupantes de un vehículo. 
+        
+        A continuación, se presenta el flujo general que comprende la venta en general de SOAT.
+
+         ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/SOATModel.svg)
+
+        Como se observa, son tres los procesos que comprenden la venta total de SOAT. En cada uno de estos procesos, distintas APIS de Interseguro interactuán. Cada proceso será explicado en breve.
+        
+        ## Obtención de Datos
+        El primero en presentarse es la obtención de datos. En general, este proceso se describe a través de dos actividades muy importantes, las cuales son recopilar y medir información sobre variables específicas que conciernen datos del Vehículo y el Cliente, que luego en función a ellos se dispone otra serie de actividades desencadenantes y se evaluan resultados.
+        <br>
+
+        En breve, se muestra el diagrama de flujo del proceso de obtención de datos  de venta total de SOAT que ofrece Interseguro.
+         <br><br>
+        ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/DataExtraction.png)
+        <br> <br>Como se percibe, el flujo de obtención de datos involucra al  API Vehículo y al API Cliente, los cuales pueden ser vistas en líneas posteriores en la sección de API Reference (ver [API Vehiculo](#tag/Vehiculo) y [API Cliente](#tag/Cliente)). En ese sentido, la explicación se centrará en ver las acciones realizadas en referencia a cada API mencionada. 
+        
+        A continuación se presenta la API Vehículo:
+         > <strong>API Vehículo: </strong>El proceso de Obtención de Datos comienza cuando se ingresa la placa del Vehículo. El paso posterior es verificar si existen datos del vehículo. En ese sentido se tiene dos opciones:
+         >> * Si se encuentra datos se prosigue a mostrar los datos del vehículo solicitado e incluso, estos datos pueden ser editables.
+        >> * En caso contrario, se solicita datos del vehículo para ser ingresados al sistema de manera manual.
+         >
+        <br> Posteriormente se muestra la API Cliente:
+        > <strong>API Cliente: </strong>El proceso de Obtención de Datos continúa con esta API y nuevamente se hace el ingreso del tipo y número de documento del cliente. El paso posterior es verificar si existen datos del cliente registrados anteriormente. En ese sentido se tiene dos opciones: 
+      
+        >> * Si se encuentra datos se prosigue a mostrar los datos del cliente solicitado e incluso, recalcando una vez más que estos datos pueden ser editables.
+
+        >> * En caso contrario, se solicita datos del cliente que sean ingresados por el mismo de manera manual.
+        
+         ## Cotización
+         En segundo lugar, se tiene a la cotización. En general, este proceso se refiere al proceso de asignar un precio estimado o valor de venta del SOAT calculado en base a la información ingresada del Vehículo y el Cliente solicitada en el proceso anterior.
+         <br>
+         A continuación, se muestra el diagrama de flujo del proceso de cotización de venta total de SOAT que ofrece Interseguro. 
+        <br><br>
+        ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/Quote.png)
+         <br><br>Como se observa, el flujo de cotización sólo involucra al  API Pricing, a diferencia del proceso anterior, el cual nuevamente puede ser visto en líneas posteriores en la sección de API Reference (ver [API Pricing](#tag/Pricing)). De igual modo, se explicará de manera detallada las acciones realizadas en referencia a la API mencionada. 
+         
+         A continuación se presenta la API Pricing:
+        > <strong>API Pricing: </strong>El proceso de Cotización inicia cuando se hace el ingreso automático de la información contenida en la API de Vehículo y API de Cliente. El paso siguiente es procesar el precio en base a la información ingresada. En ese sentido se tiene dos opciones: 
+           
+        >> * Si se ha ha obtenido un precio se procede a enviar el precio más el código de cotización.
+
+        >> * En caso opuesto, se procesa nuevamente un precio y se vuelve a realizar la misma consulta de si se ha obtenido un precio.
+
+         ## Venta
+        Finalmente, se presenta la Venta. En líneas generales, se define como el acto de negociación final que concluye la venta de SOAT entre el vendedor y la otra el comprador.
+         
+        En breve, se muestra el diagrama de flujo del proceso de Venta aplicado al contexto de venta de SOAT que ofrece Interseguro.
+        <br><br>
+        ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/Sales.svg)  
+        <br><br>
+        Como se visualiza, el flujo de venta final únicamente involucra al  API de Ventas, análogamente al proceso anterior, el cual de la misma manera puede ser vista en líneas posteriores en la sección de API Reference (ver [API Venta](#tag/Venta)). Del mismo modo, la explicación se centrará en ver las acciones realizadas en referencia al API mencionada. 
+        
+        A continuación se presenta la API Ventas:
+        > <strong>API Ventas: </strong>El proceso de Ventas empieza  cuando se recibe el código de cotización más fechas de vigencia y adicionalmente el medio de pago. El paso posterior es consultar al cliente si acepta y procede a pagar exitosamente. De ese modo, se tiene dos opciones:
+            
+        >> * Si se ha aceptado el pago se procede a enviar el código de póliza, el número de póliza, el enlace del certificado y finalmente, el enlace del wallet.
+        >> * En caso contrario, se solicita visualizar nuevamente el precio y se hace el consulta nuevamente si acepta a pagar de manera exitosa.
+ 
+ -
+ 
+   name: "Vehículo"
+   description: "\nPara facilitar la compresión y simplificar el manejo de las RESTful APIS de Interseguro, se ha facilitado la definición de cada entidad y conceptos relacionados a ella. En esta sección, se mostrará a la entidad Vehículo.
+
+ \n\n  Se puede percibir a la entidad  Vehiculo como el medio de transporte a asegurar en Interseguro. 
+  \n\n A continuación se presenta la entidad de Vehículo y ciertos conceptos necesarios a conocer dentro del API Vehículo. Estos erie de términos serán visibles para el desarrollador al momento de integrar esta y otras APIS de Interseguro.
+  \n\n ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/VehicleEntity.svg) 
+    \n"
+
+ -
+   name: "Cliente"
+   description: "\n Para facilitar la compresión y simplificar el manejo de las RESTful APIS de Interseguro, se ha facilitado la definición de entidades y sus conceptos relacionados a ella. En esta sección, se mostrará a la entidad Cliente.
+   \n\n Se puede percibir a la entidad Cliente como la persona que ha realizado una compra o ya tiene un producto con Interseguro. 
+ \n\n A continuación se muestran una serie de términos con sus respectivas definiciones con relación a la entidad Cliente, los cuales posteriormente serán visibles para el desarrollador al momento de integrar estas y otras APIS de Interseguro. 
+    \n ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/ClientEntity.svg)\n"
+
+ -
+   name: "Pricing"
+   description: "\n\n Para facilitar la compresión y simplificar el manejo de las RESTful APIS de Interseguro, se ha facilitado la definición de entidades y sus conceptos relacionados a ella. En esta sección, se mostrará a la entidad Pricing.
+     \n\n Se puede percibir a la entidad venta Pricing como el método para asignar precio a un producto.
+      \n\n A continuación se muestran una serie de términos con sus respectivas definiciones con relación a la entidad Pricing, los cuales posteriormente serán visibles para el desarrollador al momento de integrar estas y otras APIS de Interseguro. 
+   \n"
+
+ -
+   name: "Venta"
+   description: "\n \n\n Para facilitar la compresión y simplificar el manejo de las RESTful APIS de Interseguro, se ha facilitado la definición de entidades y sus conceptos relacionados a ella. En esta sección, se mostrará a la entidad Venta.
+     \n\n Se puede percibir a la entidad Venta como la acción que se genera de vender un bien o servicio a cambio de dinero. 
+     \n\n A continuación se muestran una serie de términos con sus respectivas definiciones con relación a la entidad Venta, los cuales posteriormente serán visibles para el desarrollador al momento de integrar estas y otras APIS de Interseguro. 
+    \n ![](https://storage.googleapis.com/interseguro-shared.appspot.com/diagrams/SalesEntity.svg)\n"
+
+x-tagGroups:
+
+  - name: "Producto"
+    tags:
+      - SOAT
+
+  - name: "API Reference"
+    description: "\n El Portal de Desarrolladores de Interseguro ofrece las APIS de Vehículo, Cliente, Pricing y Ventas mostradas a continuación. Cabe resaltar que cada API contiene un menú vertical que contiene las siguientes secciones: \n"
+    tags:
+      - Vehículo
+      - Cliente
+      - Pricing
+      - Venta   
+     
+  
+paths:
+
+## API CAR PATHS  
+  /api/v1/car/{productId}/{agencyId}/{plate}:
+    parameters:
+      - name: productId
+        in: path
+        schema:
+          $ref: '#/components/schemas/ProductId'
+      - name: agencyId
+        in: path
+        schema:
+          $ref: '#/components/schemas/AgencyId'
+      - name: plate
+        in: path
+        schema:
+          $ref: '#/components/schemas/Plate'
+    get:
+      summary: Obtiene los datos de un vehiculo
+      description: Puedes probar esta API en la siguiente colección de Postman [![Pruébalo in Postman](https://run.pstmn.io/button.svg)](https://god.postman.co/run-collection/8c2af0d94611f8f1b5a0)
+      operationId: findCarByProductIdAndAgencyIdAndPlate
+      responses:
+        200:
+          description: La solicitud se ha procesado con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundCar'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - jwtAuth: []
+      tags:
+        - Vehículo
+
+  /api/v1/make/{productId}/{agencyId}:
+    parameters:
+      - name: productId
+        in: path
+        schema:
+          $ref: '#/components/schemas/ProductId'
+      - name: agencyId
+        in: path
+        schema:
+          $ref: '#/components/schemas/AgencyId'
+    get:
+      summary: Obtiene la lista de marcas ordenadas
+      operationId: findAllMakes
+      responses:
+        200:
+          description: Lista de marcas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MakeListResponse'
+      security:
+        - jwtAuth: []
+      tags:
+        - Vehículo
+
+  /api/v1/model/{productId}/{agencyId}/{makeId}:
+    parameters:
+      - name: productId
+        in: path
+        schema:
+          $ref: '#/components/schemas/ProductId'
+      - name: agencyId
+        in: path
+        schema:
+          $ref: '#/components/schemas/AgencyId'
+      - name: makeId
+        in: path
+        schema:
+          $ref: '#/components/schemas/MakeId'
+    get:
+      summary: Obtiene la lista de modelos ordenados
+      operationId: findAllModels
+      responses:
+        200:
+          description: Lista de modelos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelListResponse'
+      security:
+        - jwtAuth: []
+      tags:
+        - Vehículo
+
+  /api/v1/category/{productId}/{agencyId}:
+    parameters:
+      - name: productId
+        in: path
+        schema:
+          $ref: '#/components/schemas/ProductId'
+      - name: agencyId
+        in: path
+        schema:
+          $ref: '#/components/schemas/AgencyId'
+    get:
+      summary: Obtiene la lista de Categorías ordenadas
+      operationId: findAllCategories
+      responses:
+        200:
+          description: Lista de Categorías
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryListResponse'
+      security:
+        - jwtAuth: []
+      tags:
+        - Vehículo
+
+  /api/v1/use/{productId}/{agencyId}:
+    parameters:
+      - name: productId
+        in: path
+        schema:
+          $ref: '#/components/schemas/ProductId'
+      - name: agencyId
+        in: path
+        schema:
+          $ref: '#/components/schemas/AgencyId'
+    get:
+      summary: Obtiene la lista de Usos ordenados
+      operationId: findAllUses
+      responses:
+        200:
+          description: Lista de Usos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UseListResponse'
+      security:
+        - jwtAuth: []
+      tags:
+        - Vehículo 
+
+      
+ ## API CLIENTES PATHS
+  
+  /api/v1/client/document-type-list:
+    get:
+      summary: Obtiene la lista de Tipos de Documento
+      description: Puedes probar esta API en la siguiente colección de Postman [![Pruébalo in Postman](https://run.pstmn.io/button.svg)](https://god.postman.co/run-collection/8c2af0d94611f8f1b5a0)
+      operationId: documentTypeList
+      responses:
+        200:
+          description: Lista de Tipos de documento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentTypeResponse'
+        400:
+          description: Error por solicitud incorrecta
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - jwtAuth: []
+      tags:
+        - Cliente
+
+  /api/v1/client/district/{provinceId}:
+    parameters:
+      - name: provinceId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProvinceId'
+    get:
+      summary: Obtiene la lista de Distritos que pertenecen a una Provincia
+      operationId: districtByProvinceId
+      responses:
+        200:
+          description: Lista de Distritos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistrictResponse'
+        400:
+          description: Error por solicitud incorrecta
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - jwtAuth: []
+      tags:
+        - Cliente
+
+  /api/v1/client/province/{departmentId}:
+    parameters:
+      - name: departmentId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DepartmentId'
+    get:
+      summary: Obtiene la lista de Provincias que pertenecen a un Departamento
+      operationId: provinceByDepartmentId
+      responses:
+        200:
+          description: Lista de Provincias
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvinceResponse'
+        400:
+          description: Error por solicitud incorrecta
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - jwtAuth: []
+      tags:
+        - Cliente
+
+  /api/v1/client/department:
+    get:
+      summary: Obtiene la lista de Departamentos
+      operationId: departmentList
+      responses:
+        200:
+          description: Lista de Departamentos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentResponse'
+        400:
+          description: Error por solicitud incorrecta
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - jwtAuth: []
+      tags:
+        - Cliente
+
+  /api/v1/client/{productId}/{agencyId}/{documentNumber}:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProductId'
+      - name: agencyId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/AgencyId'
+      - name: documentNumber
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/DocumentNumber'
+    get:
+      summary: Obtiene los datos de una persona con su Número de Documento
+      operationId: findClientByProductIdAndAgencyIdAndDocumentNumber
+      responses:
+        200:
+          description: Respuesta al obtener los datos de una persona
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoundClient'
+        400:
+          description: Error por solicitud incorrecta
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      security:
+        - jwtAuth: []
+      tags:
+        - Cliente
+
+  ## API Sales
+  /api/v1/sale/save:
+    post:
+      summary: Guarda los datos de una venta
+      description: Puedes probar esta API en la siguiente colección de Postman [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.postman.co/run-collection/e86606966aa3728a8a22)
+      operationId: saveSale
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveSaleRequest'
+      responses:
+        200:
+          description: Datos guardados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      tags:
+        - Venta
+      security:
+        - jwtAuth: []
+
+  ## API Pricing
+
+  /api/v1/getPricing:
+    post:
+      summary: Obtener el precio
+      description: Puedes probar esta API en la siguiente colección de Postman [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.postman.co/run-collection/e86606966aa3728a8a22)
+      operationId: getPricing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingRequest'
+      responses:
+        200:
+          description: Datos Consultados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      tags:
+        - Pricing 
+      security:
+        - jwtAuth: []
+
+ 
+
+components:
+
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description:  |
+        Interseguro API realiza el proceso de autenticación por medio de un JWT en la cabecera de la solicitud. JWT es explicado de la siguiente manera.
+    
+        - <strong>JWT</strong>: Se define como un tipo de token el cual engloba una estructura, la cual puede ser desencriptada por el servidor y de esta forma, permitirá la autenticación del usuario al momento de usar cada API de Interseguro.
+
+        Existe una serie de librerías que permite crear un JWT, y todo dependerá del lenguaje que utilicemos. Sin embargo, en este caso la generación del JWT será mostrada en lenguaje java para su posterior implementación en las APIS de Interseguro.
+
+        ``` 
+        import java.io.FileInputStream;
+        import java.io.IOException;
+        import java.security.interfaces.RSAPrivateKey;
+        import java.util.Date;
+        import java.util.concurrent.TimeUnit;
+
+        public class JWT {
+
+          public static void main (String[] arg) throws IOException {
+            // Archivo para firmar el JWT (sera proporcionada por Interseguro)
+            String keyfile = "...";
+            // Correo electronico del cliente del API
+            String email = "...";
+            // Receptor para lo que el JWT fue emitido
+            String audience = "...";
+            int expiryLength = 5;
+            Date now = new Date();
+            Date expTime = new Date(System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expiryLength));
+
+            JWTCreator.Builder token = com.auth0.jwt.JWT.create()
+                  .withIssuedAt(now)
+                  .withExpiresAt(expTime)
+                  .withIssuer(email)
+                  .withAudience(audience)
+                  .withSubject(email)
+                  .withClaim("email", email);
+
+            FileInputStream stream = new FileInputStream(keyfile);
+            ServiceAccountCredentials cred = ServiceAccountCredentials.fromStream(stream);
+            RSAPrivateKey key = (RSAPrivateKey) cred.getPrivateKey();
+            Algorithm algorithm = Algorithm.RSA256(null, key);
+
+            String signedJwt = token.sign(algorithm);
+            System.out.println("JWT: " + signedJwt);
+          }
+        }
+
+        ``` 
+        <br> Los JWT tienen una estructura definida y estándar basada en tres partes:
+        <br>
+  responses:
+
+    UnauthorizedError:
+      description: El token de acceso no existe o es invalido
+  schemas:
+    ## API CAR Componentes
+    
+    ModelId:
+      description: Identificador del modelo del vehiculo
+      type: integer
+      format: int32
+    
+    VersionId:
+      description: Identificador de la version del vehiculo
+      type: integer
+      format: int32
+    Version:
+      description: Version
+      type: string
+    CategoryId:
+      description: Identificador de la categoria del vehiculo
+      type: integer
+      format: int32
+    
+    UseId:
+      description: Identificador del uso del vehiculo
+      type: integer
+      format: int32
+    Color:
+      description: Identificador del color del vehiculo
+      type: string
+    SerialNumber:
+      description: Numero de serie del Vehiculo
+      type: string
+    MotorNumber:
+      description: Numero de motor del Vehiculo
+      type: string
+    VinNumber:
+      description: Vin del vehiculo
+      type: string
+    ManufactureYear:
+      description: Año de fabricacion del vehiculo
+      type: integer
+      format: int32
+    
+    ProductId:
+      description: Identificador del producto
+      type: integer
+      format: int32
+    AgencyId:
+      description: Identificador de la agencia
+      type: integer
+      format: int32
+    State:
+      description: |
+        Estado del registro
+        * 0: Inactivo
+        * 1: Vigente
+      type: integer
+      format: int32
+      enum:
+        - 0
+        - 1
+    MakeId:
+      description: Identificador de la marca
+      type: integer
+      format: int32
+   
+    ValueId:
+      description: Identificador del valor comercial
+      type: integer
+    Value:
+      description: Valor comercial
+      type: number
+      format: double
+    Year:
+      description: Año del vehiculo
+      type: integer
+      format: int32
+
+      ## API CLIENT components
+    ResponseCode:
+      description: |
+        Código numérico de la respuesta
+        * 0: La solicitud se ha realizado con éxito
+        * n: Cualquier otro n&uacute;mero indica que ha ocurrido un error
+      type: integer
+      format: int32
+    ResponseMessage:
+      description: Mensaje de la respuesta
+      type: string
+    Product:
+      description: Nombre del Producto
+      type: string
+    DocumentNumber:
+      description: |
+        Número de Documento de la persona
+        * DNI: Debe tener 8 caracteres numéricos
+        * CE: Debe tener 9 caracteres numéricos
+        * RUC: Debe tener 11 caracteres numéricoss y debe iniciar con 10 o 20
+      type: string
+    DocumentTypeId:
+      description: Identificador del Tipo de Documento
+      type: integer
+      format: int32
+    DocumentType:
+      description: Tipo de Documento
+      type: string
+    PersonTypeId:
+      description: Identificador del Tipo de Persona
+      type: integer
+      format: int32
+    PersonType:
+      description: Tipo de Persona
+      type: string
+    GenderId:
+      description: Identificador del Género de la persona
+      type: integer
+      format: int32
+    Gender:
+      description: G&eacute;nero de la persona
+      type: string
+    BusinessLineId:
+      description: Identificador de la linea de negocio
+      type: integer
+      format: int32
+    BusinessLine:
+      description: Linea de negocio
+      type: string
+    DepartmentId:
+      description: Identificador del Departamento
+      type: integer
+      format: int32
+    ProvinceId:
+      description: Identificador de la Provincia
+      type: integer
+      format: int32
+    DistrictId:
+      description: Identificador del Distrito
+      type: integer
+      format: int32
+    District:
+      description: Nombre del Distrito
+      type: string
+    UbigeoDepartment:
+      description: Código de Ubigeo del Departamento, contiene 2 caracteres
+      type: string
+      maxLength: 2
+      minLength: 2
+    UbigeoProvince:
+      description: Código de Ubigeo de la Provincia, contiene 4 caracteres
+      type: string
+      maxLength: 4
+      minLength: 4
+    UbigeoDistrict:
+      description: Código de Ubigeo del Distrito, contiene 6 caracteres
+      type: string
+      maxLength: 6
+      minLength: 6
+    Birthdate:
+      description: |
+        Fecha de nacimiento de la persona o fecha de creaci&oacute;n de la Empresa, el formato debe ser dd/mm/yyyy.
+        <br>Donde:
+        * dd: Día
+        * mm: Mes
+        * yyyy: Año
+      type: string
+    Collaborator:
+      description: |
+        Indica si la persona es colaborador de Intercorp
+        * 0: No es colaborador
+        * 1: Es colaborador
+      type: integer
+      format: int32
+      enum:
+        - 0
+        - 1
+    Cliente:
+      description: |
+        Indica que la persona ya es cliente o no
+        * 0: No es cliente
+        * 1: Es cliente
+      type: integer
+      format: int32
+      enum:
+        - 0
+        - 1
+    PhoneNumber:
+      description: |
+        Número de teléfono de la persona, debe contener 9 caracteres e iniciar con el número 9
+      type: string
+    OptIn:
+      description: |
+        Consentimiento de la persona para recibir comunicaciones
+        * 0: El cliente no ha aceptado recibir comunicaciones
+        * 1: El cliente ha aceptado recibir comunicaciones
+      type: integer
+      format: int32
+
+    ## API Sales Components
+    ChannelId:
+      description: Id de canal
+      type: integer
+    QuoteId:
+      description: Id de cotizacion
+      type: integer
+    StartDate:
+      description: Fecha de inicio de vigencia de póliza
+      type: string
+    EndDate:
+      description:  Fecha de fin de vigencia de póliza
+      type: string
+    PaymentType:
+      description: Tipo de pago
+      type: integer
+    SendInformationBooklet:
+      description: Se enviará la cartilla informativa?
+      type: boolean
+
+     ## API Pricing Components
+    Car:
+      type: "object"
+      properties:
+        plate:
+          $ref: '#/components/schemas/Plate'
+        category:
+          $ref: '#/components/schemas/Category'
+        use:
+          $ref: '#/components/schemas/Use'
+        make:
+          $ref: '#/components/schemas/Make'
+        model:
+          $ref: '#/components/schemas/Model'
+        carSeats:
+          $ref: '#/components/schemas/CarSeats'
+        modelYear:
+          $ref: '#/components/schemas/ModelYear'
+      required:
+        - plate
+        - category
+        - use
+        - make
+        - model
+        - carSeats
+        - modelYear
+    Client:
+      type: "object"
+      properties:
+        document:
+          $ref: '#/components/schemas/Document'
+        name:
+          $ref: '#/components/schemas/Name'
+        paternalSurname:
+          $ref: '#/components/schemas/PaternalSurname'
+        maternalSurname:
+          $ref: '#/components/schemas/MaternalSurname'
+        department:
+          $ref: '#/components/schemas/Department'
+        province:
+          $ref: '#/components/schemas/Province'
+        ubigeoCode:
+          $ref: '#/components/schemas/UbigeoCode'
+        address:
+          $ref: '#/components/schemas/Address'
+        email:
+          $ref: '#/components/schemas/Email'
+        isCollaborator:
+          $ref: '#/components/schemas/IsCollaborator'
+      required:
+        - document
+        - name
+        - paternalSurname
+        - maternalSurname
+        - address
+        - email
+        - department
+        - province
+        - ubigeoCode
+    Plate:
+      description: Numero de placa
+      type: string
+      minLength: 6
+      maxLength: 6
+      pattern: "[A-Z][A-Z0-9]{5}"
+    Category:
+      description: Categoria
+      type: string
+    Use:
+      description: Uso
+      type: string
+    Make:
+      description: Marca
+      type: string
+    Model:
+      description: Modelo
+      type: string
+    CarSeats:
+      description: Numero de asientos del vehiculo
+      type: integer
+      minLength: 1
+      maxLength: 3
+      minimum: 2
+      maximum: 999
+      format: int32
+    ModelYear:
+      description: Año de modelo del vehiculo
+      type: integer
+      minLength: 1
+      maxLength: 3
+      minimum: 1970
+      format: int32
+    Document:
+      description: |
+        Numero de documento del cliente.
+        * DNI: Debe tener 8 caracteres numericos
+        * CE: Debe tener 9 caracteres numericos
+        * RUC: Debe tener 11 caracteres numericos y debe iniciar con 10 o 20
+      type: string
+      minLength: 8
+      maxLength: 11
+      pattern: "[0-9]"
+    Name:
+      description: Nombre del cliente o razon social
+      type: string
+    PaternalSurname:
+      description: Apellido paterno del cliente
+      type: string
+    MaternalSurname:
+      description: Apellido materno del cliente
+      type: string
+    Department:
+      description: Departamento
+      type: string
+    Province:
+      description: Provincia
+      type: string
+    UbigeoCode:
+      description: Codigo de Ubigeo Reniec
+      type: string
+      minLength: 6
+      maxLength: 6
+      pattern: '^\d{6}$'
+    Address:
+      description: Direccion del cliente
+      type: string
+    Email:
+      description: Correo electronico del cliente
+      type: string
+      format: email
+    IsCollaborator:
+      description: ¿Es Colaborador?
+      type: string
+      minLength: 2
+      maxLength: 2
+      pattern: "[A-Z]" 
+    ElectronicPrice:
+      description: Precio Electronico
+      type: string
+    PhysicalPrice:
+      description: Precio Fisico
+      type: string
+    ElectronicCode:
+      description: Codigo Electronico
+      type: string
+    PhysicalCode:
+      description: Codigo Fisico
+      type: string
+    Id:
+      description: Id de CotizaciÃ³n
+      type: string
+    Code:
+      description: Codigo
+      type: string 
+
+   
+    ## API CAR Request
+    CarRequest:
+      type: object
+      properties:
+        productId:
+          $ref: '#/components/schemas/ProductId'
+        agencyId:
+          $ref: '#/components/schemas/AgencyId'
+        plate:
+          $ref: '#/components/schemas/Plate'
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        versionId:
+          $ref: '#/components/schemas/VersionId'
+        categoryId:
+          $ref: '#/components/schemas/CategoryId'
+        useId:
+          $ref: '#/components/schemas/UseId'
+        color:
+          $ref: '#/components/schemas/Color'
+        serialNumber:
+          $ref: '#/components/schemas/SerialNumber'
+        motorNumber:
+          $ref: '#/components/schemas/MotorNumber'
+        vinNumber:
+          $ref: '#/components/schemas/VinNumber'
+        manufactureYear:
+          $ref: '#/components/schemas/ManufactureYear'
+        modelYear:
+          $ref: '#/components/schemas/ModelYear'
+        carSeats:
+          $ref: '#/components/schemas/CarSeats'
+      required:
+        - productId
+        - agencyId
+        - plate
+        - modelId
+        - versionId
+        - categoryId
+        - useId
+    FoundCar:
+      type: object
+      properties:
+        plate:
+          $ref: '#/components/schemas/Plate'
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        model:
+          $ref: '#/components/schemas/Model'
+        versionId:
+          $ref: '#/components/schemas/VersionId'
+        version:
+          $ref: '#/components/schemas/Version'
+        categoryId:
+          $ref: '#/components/schemas/CategoryId'
+        category:
+          $ref: '#/components/schemas/Category'
+        useId:
+          $ref: '#/components/schemas/UseId'
+        use:
+          $ref: '#/components/schemas/Use'
+        color:
+          $ref: '#/components/schemas/Color'
+        serialNumber:
+          $ref: '#/components/schemas/SerialNumber'
+        motorNumber:
+          $ref: '#/components/schemas/MotorNumber'
+        vinNumber:
+          $ref: '#/components/schemas/VinNumber'
+        manufactureYear:
+          $ref: '#/components/schemas/ManufactureYear'
+        modelYear:
+          $ref: '#/components/schemas/ModelYear'
+        carSeats:
+          $ref: '#/components/schemas/CarSeats'
+      required:
+        - productId
+        - agencyId
+        - plate
+        - modelId
+        - model
+        - versionId
+        - version
+        - categoryId
+        - category
+        - useId
+        - use    
+    MakeObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/MakeId'
+        name:
+          $ref: '#/components/schemas/Make'
+        state:
+          $ref: '#/components/schemas/State'
+    MakeListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/MakeObject'
+    ModelRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ModelId'
+        name:
+          $ref: '#/components/schemas/Model'
+        makeId:
+          $ref: '#/components/schemas/MakeId'
+        state:
+          $ref: '#/components/schemas/State'
+    ModelObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ModelId'
+        name:
+          $ref: '#/components/schemas/Model'
+        makeId:
+          $ref: '#/components/schemas/MakeId'
+        state:
+          $ref: '#/components/schemas/State'
+    ModelListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelObject'
+    VersionRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/VersionId'
+        name:
+          $ref: '#/components/schemas/Version'
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        state:
+          $ref: '#/components/schemas/State'
+    VersionObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/VersionId'
+        name:
+          $ref: '#/components/schemas/Version'
+        modelId:
+          $ref: '#/components/schemas/ModelId'
+        state:
+          $ref: '#/components/schemas/State'
+    ValueObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ValueId'
+        value:
+          $ref: '#/components/schemas/Value'
+        versionId:
+          $ref: '#/components/schemas/VersionId'
+        year:
+          $ref: '#/components/schemas/Year'
+        state:
+          $ref: '#/components/schemas/State'
+    ValueListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValueObject'
+    CategoryRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/CategoryId'
+        name:
+          $ref: '#/components/schemas/Category'
+        state:
+          $ref: '#/components/schemas/State'
+    CategoryObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/CategoryId'
+        name:
+          $ref: '#/components/schemas/Category'
+        state:
+          $ref: '#/components/schemas/State'
+    CategoryListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryObject'
+    UseObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UseId'
+        name:
+          $ref: '#/components/schemas/Use'
+        state:
+          $ref: '#/components/schemas/State'
+    UseListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/UseObject'
+    CategoryXUseIdObject:
+      type: object
+      properties:
+        categoryId:
+          $ref: '#/components/schemas/CategoryId'
+        useId:
+          $ref: '#/components/schemas/UseId'
+    CategoryXUseObject:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/CategoryXUseIdObject'
+        state:
+          $ref: '#/components/schemas/State'
+    CategoryXUseListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryXUseObject'
+
+    
+    ## API CLIENT Request
+    SimpleResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ResponseCode'
+        message:
+          $ref: '#/components/schemas/ResponseMessage'
+    FoundGender:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/GenderId'
+        name:
+          $ref: '#/components/schemas/Gender'
+    GenderResponse:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoundGender'
+    FoundDocumentType:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/DocumentTypeId'
+        name:
+          $ref: '#/components/schemas/DocumentType'
+    DocumentTypeResponse:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoundDocumentType'
+    FoundDistrict:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/DistrictId'
+        name:
+          $ref: '#/components/schemas/District'
+        ubigeo:
+          $ref: '#/components/schemas/UbigeoDistrict'
+    DistrictResponse:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoundDistrict'
+    FoundProvince:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ProvinceId'
+        name:
+          $ref: '#/components/schemas/Province'
+        ubigeo:
+          $ref: '#/components/schemas/UbigeoProvince'
+    ProvinceResponse:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoundProvince'
+    FoundDepartment:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/DepartmentId'
+        name:
+          $ref: '#/components/schemas/Department'
+        ubigeo:
+          $ref: '#/components/schemas/UbigeoDepartment'
+    DepartmentResponse:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoundDepartment'
+
+    FoundClient:
+      description: Datos de una persona
+      type: object
+      properties:
+        productId:
+          $ref: '#/components/schemas/ProductId'
+        product:
+          $ref: '#/components/schemas/Product'
+        documentNumber:
+          $ref: '#/components/schemas/DocumentNumber'
+        documentTypeId:
+          $ref: '#/components/schemas/DocumentTypeId'
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+        personTypeId:
+          $ref: '#/components/schemas/PersonTypeId'
+        personType:
+          $ref: '#/components/schemas/PersonType'
+        genderId:
+          $ref: '#/components/schemas/GenderId'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        businessLineId:
+          $ref: '#/components/schemas/BusinessLineId'
+        businessLine:
+          $ref: '#/components/schemas/BusinessLine'
+        name:
+          $ref: '#/components/schemas/Name'
+        paternalSurname:
+          $ref: '#/components/schemas/PaternalSurname'
+        maternalSurname:
+          $ref: '#/components/schemas/MaternalSurname'
+        birthdate:
+          $ref: '#/components/schemas/Birthdate'
+        collaborator:
+          $ref: '#/components/schemas/Collaborator'
+        client:
+          $ref: '#/components/schemas/Cliente'
+        department:
+          $ref: '#/components/schemas/Department'
+        province:
+          $ref: '#/components/schemas/Province'
+        district:
+          $ref: '#/components/schemas/District'
+        ubigeo:
+          $ref: '#/components/schemas/UbigeoDistrict'
+        address:
+          $ref: '#/components/schemas/Address'
+        email:
+          $ref: '#/components/schemas/Email'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+        optIn:
+          $ref: '#/components/schemas/OptIn'
+   
+          
+  ## API SALES Request
+    SaveSaleRequest:
+      description: Conjunto de datos para el registro de una nueva venta
+      type: object
+      properties:
+        channelId:
+          $ref: '#/components/schemas/ChannelId'
+        agencyId:
+          $ref: '#/components/schemas/AgencyId'
+        quoteId:
+          $ref: '#/components/schemas/QuoteId'
+        startDate:
+          $ref: '#/components/schemas/StartDate'
+        endDate:
+          $ref: '#/components/schemas/EndDate'
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+        sendInformationBooklet:
+          $ref: '#/components/schemas/SendInformationBooklet'
+      required:
+        - channelId
+        - agencyId
+        - quoteId
+        - startDate
+        - endDate
+        - paymentType
+
+     ## API Pricing Request
+    Request:
+      description: Solicitud del servicio
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/Code'
+    PricingRequest:
+      description: Solicitud del servicio
+      type: object
+      properties:
+        car:
+          $ref: '#/components/schemas/Car'
+        client:
+          $ref: '#/components/schemas/Client'        
+      required:
+        - "car"
+        - "client"
+    CommonResponse:
+      description: Respuesta del servicio
+      type: object
+    GetPricing:
+      type: object
+      properties:
+        electronicPrice:
+          $ref: '#/components/schemas/ElectronicPrice'
+        physicalPrice:
+          $ref: '#/components/schemas/PhysicalPrice'
+        electronicCode:
+          $ref: '#/components/schemas/ElectronicCode'
+        physicalCode:
+          $ref: '#/components/schemas/PhysicalCode'
+        id:
+          $ref: '#/components/schemas/Id'
+        
